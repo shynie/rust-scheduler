@@ -27,7 +27,7 @@ pub fn set_priority(which: Which, who: i32, priority: i32) -> Result<(), ()> {
         Which::User => PRIO_USER,
     };
 
-    match unsafe { setpriority(c_which as u32, who as u32, priority) } {
+    match unsafe { setpriority(c_which as i32, who as u32, priority) } {
         0 => Ok(()),
         _ => Err(()),
     }
@@ -47,7 +47,7 @@ pub fn get_priority(which: Which, who: i32) -> Result<i32, ()> {
     };
 
     set_errno(Errno(0));
-    let priority = unsafe { getpriority(c_which as u32, who as u32) };
+    let priority = unsafe { getpriority(c_which as i32, who as u32) };
     match errno().0 {
         0 => Ok(priority),
         _ => Err(()),
